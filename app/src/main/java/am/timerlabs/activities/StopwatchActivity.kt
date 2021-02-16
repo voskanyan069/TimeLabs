@@ -2,6 +2,7 @@ package am.timerlabs.activities
 
 import am.timerlabs.CountUpTimer
 import am.timerlabs.R
+import am.timerlabs.animation.AnimateView
 import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
@@ -13,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 
 /**
- * TODO: Animate views opacity on timer and stopwatch start
  * TODO: Next and previous numbers with animation
  */
 
@@ -27,6 +27,7 @@ class StopwatchActivity : AppCompatActivity() {
     private lateinit var pauseResumeStopwatchBtn: MaterialButton
     private lateinit var stopStopwatchBtn: MaterialButton
     private lateinit var countUpTimer: CountUpTimer
+    private val opacityDuration: Long = 1000
     private var tempSec: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,31 +60,41 @@ class StopwatchActivity : AppCompatActivity() {
                 .setInterpolator(AccelerateDecelerateInterpolator())
                 .setDuration(2000)
                 .withEndAction {
-                    stopwatchCurrentSeconds.visibility = View.VISIBLE
-                    stopwatchActionButtonsLayout.visibility = View.VISIBLE
-                    appbarLayout.visibility = View.INVISIBLE
                     startStopwatch()
-
                     startStopwatchBtn.setOnClickListener { null }
                 }.start()
+
+            stopwatchCurrentSeconds.text = "0"
+            val stopwatchVisibility = stopwatchCurrentSeconds.visibility
+            stopwatchCurrentSeconds.visibility = View.VISIBLE
+            stopwatchActionButtonsLayout.visibility = View.VISIBLE
+
+            AnimateView.animateViewOpacity(stopwatchActionButtonsLayout, opacityDuration, 0f, 1f)
+            if (stopwatchVisibility == View.INVISIBLE) {
+                AnimateView.animateViewOpacity(stopwatchCurrentSeconds, opacityDuration, 0f, 1f)
+            }
         }
     }
 
     private fun onStopClicked() {
         stopStopwatchBtn.setOnClickListener {
             startStopwatchBtn.animate()
-                .scaleX(1f)
-                .scaleY(1f)
-                .setInterpolator(AccelerateDecelerateInterpolator())
-                .setDuration(2000)
-                .start()
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .setInterpolator(AccelerateDecelerateInterpolator())
+                    .setDuration(2000)
+                    .withEndAction {
+                        onStartClicked()
+                    }
+                    .start()
 
             stopwatchCurrentSeconds.visibility = View.VISIBLE
-            appbarLayout.visibility = View.VISIBLE
-            stopwatchActionButtonsLayout.visibility = View.INVISIBLE
+
+            AnimateView.animateViewOpacity(stopwatchActionButtonsLayout, opacityDuration, 1f, 0f) {
+                stopwatchActionButtonsLayout.visibility = View.INVISIBLE
+            }
 
             countUpTimer.cancel()
-            onStartClicked()
         }
     }
 
@@ -91,7 +102,6 @@ class StopwatchActivity : AppCompatActivity() {
         pauseResumeStopwatchBtn.setOnClickListener {
             stopwatchCurrentSeconds.visibility = View.VISIBLE
             stopwatchActionButtonsLayout.visibility = View.VISIBLE
-            appbarLayout.visibility = View.INVISIBLE
 
             if (pauseResumeStopwatchBtn.text == getText(R.string.pause)) {
                 pauseResumeStopwatchBtn.text = getText(R.string.resume)

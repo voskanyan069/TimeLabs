@@ -113,7 +113,12 @@ class TimerActivity : AppCompatActivity() {
                     startTimerBtn.scaleX = 1f
                     startTimerBtn.scaleY = 1f
 
-                    AnimateView.animateViewHeight(activeTimerBackground, milliseconds, activeTimerBackground.measuredHeight, 0)
+                    AnimateView.animateViewHeight(
+                            activeTimerBackground,
+                            milliseconds,
+                            activeTimerBackground.measuredHeight,
+                            0
+                    )
                     startTimer(milliseconds)
                 }.start()
         }
@@ -147,7 +152,7 @@ class TimerActivity : AppCompatActivity() {
         stopTimerBtn.setOnClickListener {
             timer.cancel()
             timer.onFinish()
-            AnimateView.cancelAnimation()
+            AnimateView.cancel()
         }
     }
 

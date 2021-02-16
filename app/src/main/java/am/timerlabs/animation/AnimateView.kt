@@ -19,16 +19,22 @@ class AnimateView {
             valueAnimator.start()
         }
 
-        override fun animateViewOpacity(view: View, durationMilliseconds: Long) {
-            valueAnimator = ValueAnimator.ofInt(0, 255)
-            valueAnimator.duration = durationMilliseconds
-            valueAnimator.addUpdateListener {
-                val animatedValue = valueAnimator.animatedValue as Int
-                view.background.alpha = animatedValue
-            }
+        override fun animateViewOpacity(view: View, durationMilliseconds: Long, from: Float, value: Float) {
+            view.alpha = from
+            view.animate()
+                    .alpha(value).duration = durationMilliseconds
         }
 
-        override fun cancelAnimation() {
+        override fun animateViewOpacity(view: View, durationMilliseconds: Long, from: Float, value: Float, onAnimEnd: () -> Unit) {
+            view.alpha = from
+            view.animate()
+                    .alpha(value)
+                    .withEndAction {
+                        onAnimEnd()
+                    }.duration = durationMilliseconds
+        }
+
+        override fun cancel() {
             valueAnimator.cancel()
         }
     }
