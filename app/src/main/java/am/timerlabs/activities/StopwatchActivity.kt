@@ -14,6 +14,7 @@ import com.google.android.material.button.MaterialButton
 
 /**
  * TODO: Animate views opacity on timer and stopwatch start
+ * TODO: Next and previous numbers with animation
  */
 
 class StopwatchActivity : AppCompatActivity() {

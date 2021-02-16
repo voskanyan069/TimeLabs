@@ -3,6 +3,7 @@ package am.timerlabs.animation
 import android.view.View
 
 interface AnimateViewInterface {
-    fun animateView(view: View, durationMilliseconds: Long, from: Int, to: Int)
+    fun animateViewHeight(view: View, durationMilliseconds: Long, from: Int, to: Int)
+    fun animateViewOpacity(view: View, durationMilliseconds: Long)
     fun cancelAnimation()
 }

@@ -21,6 +21,7 @@ import com.yarolegovich.discretescrollview.transform.ScaleTransformer
 /**
  * TODO: Fix bugs | sometimes not playing background animation, or play not correct time
  * TODO: Save EditText custom numbers to array and add to adapter
+ * TODO: Next and previous numbers with animation
  */
 
 class TimerActivity : AppCompatActivity() {
@@ -112,7 +113,7 @@ class TimerActivity : AppCompatActivity() {
                     startTimerBtn.scaleX = 1f
                     startTimerBtn.scaleY = 1f
 
-                    AnimateView.animateView(activeTimerBackground, milliseconds, activeTimerBackground.measuredHeight, 0)
+                    AnimateView.animateViewHeight(activeTimerBackground, milliseconds, activeTimerBackground.measuredHeight, 0)
                     startTimer(milliseconds)
                 }.start()
         }
