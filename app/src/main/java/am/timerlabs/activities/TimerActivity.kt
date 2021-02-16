@@ -17,10 +17,11 @@ import android.widget.TextView
 import com.google.android.material.button.MaterialButton
 import com.yarolegovich.discretescrollview.DiscreteScrollView
 import com.yarolegovich.discretescrollview.transform.ScaleTransformer
+import java.util.*
 
 /**
- * TODO: Fix bugs | sometimes not playing background animation, or play not correct time
  * TODO: Save EditText custom numbers to array and add to adapter
+ * TODO: Room db (or other local db)
  */
 
 class TimerActivity : AppCompatActivity() {
@@ -34,7 +35,7 @@ class TimerActivity : AppCompatActivity() {
     private lateinit var activeTimerBackground: View
     private lateinit var timerCurrentSeconds: TextView
     private lateinit var timer: CountDownTimer
-    private val timerNumbers = arrayOf(1, 5, 10, 15, 20, 25, 30)
+    private var timerNumbersSet: TreeSet<Int> = sortedSetOf(1, 5, 10, 15, 20, 25, 30)
     private var isTimerEditTextVisible = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +63,7 @@ class TimerActivity : AppCompatActivity() {
     }
 
     private fun fillTimersList() {
-        timersList.adapter = TimerAdapter(timerNumbers)
+        timersList.adapter = TimerAdapter(timerNumbersSet)
         timersList.setItemTransformer(
             ScaleTransformer.Builder()
             .setMinScale(0.5f)
@@ -91,7 +92,7 @@ class TimerActivity : AppCompatActivity() {
             val seconds: Int = if (isTimerEditTextVisible) {
                 customTimerET.text.toString().toInt()
             } else {
-                timerNumbers[timersList.currentItem]
+                timerNumbersSet.elementAt(timersList.currentItem)
             }
             val milliseconds: Long = (seconds * 1000).toLong()
             startTimerBtn.animate()
@@ -142,6 +143,9 @@ class TimerActivity : AppCompatActivity() {
                 val layoutParams = activeTimerBackground.layoutParams
                 layoutParams.height = getScreenHeight()
                 activeTimerBackground.layoutParams = layoutParams
+
+                timer.cancel()
+                AnimateView.cancel()
             }
         }
         timer.start()
