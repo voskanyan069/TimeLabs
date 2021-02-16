@@ -21,7 +21,6 @@ import com.yarolegovich.discretescrollview.transform.ScaleTransformer
 /**
  * TODO: Fix bugs | sometimes not playing background animation, or play not correct time
  * TODO: Save EditText custom numbers to array and add to adapter
- * TODO: Next and previous numbers with animation
  */
 
 class TimerActivity : AppCompatActivity() {

@@ -13,10 +13,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 
-/**
- * TODO: Next and previous numbers with animation
- */
-
 class StopwatchActivity : AppCompatActivity() {
     private lateinit var appbarLayout: LinearLayout
     private lateinit var appbarTimer: MaterialButton
