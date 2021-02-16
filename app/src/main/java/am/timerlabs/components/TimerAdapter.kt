@@ -1,4 +1,4 @@
-package am.timerlabs.adapter
+package am.timerlabs.components
 
 import am.timerlabs.R
 import android.view.LayoutInflater

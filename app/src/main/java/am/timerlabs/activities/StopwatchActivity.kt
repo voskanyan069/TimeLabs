@@ -1,6 +1,6 @@
 package am.timerlabs.activities
 
-import am.timerlabs.CountUpTimer
+import am.timerlabs.components.CountUpTimer
 import am.timerlabs.R
 import am.timerlabs.animation.AnimateView
 import android.content.Intent

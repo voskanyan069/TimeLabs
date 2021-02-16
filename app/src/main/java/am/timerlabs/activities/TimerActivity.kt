@@ -1,7 +1,7 @@
 package am.timerlabs.activities
 
 import am.timerlabs.R
-import am.timerlabs.adapter.TimerAdapter
+import am.timerlabs.components.TimerAdapter
 import am.timerlabs.animation.AnimateView
 import android.content.Intent
 import android.content.res.Resources
