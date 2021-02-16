@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/primary_color"
+    tools:context=".activities.TimerActivity">
+
+    <LinearLayout
+        android:id="@+id/appbar_layout"
+        android:layout_width="220sp"
+        android:layout_height="35sp"
+        android:layout_marginTop="20sp"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        android:weightSum="2"
+        android:layout_centerHorizontal="true">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/appbar_stopwatch"
+            android:layout_width="75sp"
+            android:layout_height="wrap_content"
+            android:theme="@style/Theme.Appbar.NotSelected"
+            android:textAppearance="@style/Theme.MaterialComponents"
+            android:background="@drawable/app_bar_left_layout"
+            android:layout_weight="1"
+            android:fontFamily="@font/jura_bold"
+            android:textSize="10sp"
+            android:text="@string/stopwatch"
+            style="?android:attr/borderlessButtonStyle"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/appbar_timer"
+            android:layout_width="75sp"
+            android:layout_height="wrap_content"
+            android:theme="@style/Theme.Appbar.Selected"
+            android:textAppearance="@style/Theme.MaterialComponents"
+            android:background="@drawable/app_bar_right_layout"
+            android:layout_weight="1"
+            android:fontFamily="@font/jura_bold"
+            android:textSize="10sp"
+            android:text="@string/timer"
+            style="?android:attr/borderlessButtonStyle"
+            />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/custom_time_timer"
+        android:layout_width="35sp"
+        android:layout_height="35sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="20sp"
+        android:layout_marginEnd="20sp"
+        android:src="@drawable/ic_custom_time"
+        />
+
+    <EditText
+        android:id="@+id/custom_timer_edittext"
+        android:layout_width="200sp"
+        android:layout_height="55sp"
+        android:layout_centerInParent="true"
+        android:paddingVertical="5sp"
+        android:paddingHorizontal="15sp"
+        android:gravity="center_horizontal"
+        android:visibility="invisible"
+        android:background="@drawable/custom_timer_edittext_layout"
+        android:inputType="numberDecimal"
+        android:fontFamily="@font/jura_bold"
+        android:textColor="@color/secondary_color"
+        android:textColorHint="#DDDDDD"
+        android:textSize="30sp"
+        android:hint="Seconds"
+        />
+
+    <com.yarolegovich.discretescrollview.DiscreteScrollView
+        android:id="@+id/timer_numbers_list"
+        android:layout_width="match_parent"
+        android:layout_height="300sp"
+        android:layout_marginTop="150sp"
+        app:dsv_orientation="horizontal"
+        tools:listitem="@layout/timers_list_view"
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/start_timer_button"
+        android:layout_width="70sp"
+        android:layout_height="70sp"
+        android:layout_marginBottom="100sp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        style="?android:attr/borderlessButtonStyle"
+        android:background="@drawable/timer_button_layout"
+        android:theme="@style/Theme.TimerButton"
+        />
+
+    <View
+        android:id="@+id/active_timer_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/accent_color"
+        android:visibility="invisible"
+        android:animateLayoutChanges="true"
+        />
+
+    <TextView
+        android:id="@+id/active_timer_seconds"
+        android:layout_width="wrap_content"
+        android:layout_height="300sp"
+        android:layout_marginTop="150sp"
+        android:gravity="center_vertical"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"
+        android:fontFamily="@font/jura_bold"
+        android:textColor="@color/secondary_color"
+        android:textSize="100sp"
+        android:text="5"
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/stop_timer_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/active_timer_seconds"
+        android:layout_marginTop="-50sp"
+        android:paddingHorizontal="30sp"
+        android:textAppearance="@style/Theme.MaterialComponents"
+        android:theme="@style/Theme.TimerButton"
+        android:background="@drawable/timer_button_layout"
+        style="?android:attr/borderlessButtonStyle"
+        android:visibility="invisible"
+        android:fontFamily="@font/jura_bold"
+        android:textSize="22sp"
+        android:textColor="@color/secondary_color"
+        android:text="@string/stop"
+        />
+
+</RelativeLayout>

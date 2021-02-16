@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="150sp"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/timer_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:fontFamily="@font/jura_bold"
+        android:textColor="@color/secondary_color"
+        android:textSize="100sp"
+        android:text="5"
+        />
+
+</FrameLayout>
