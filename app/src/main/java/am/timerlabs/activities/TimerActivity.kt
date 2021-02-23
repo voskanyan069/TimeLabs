@@ -1,28 +1,23 @@
 package am.timerlabs.activities
 
 import am.timerlabs.R
-import am.timerlabs.components.TimerAdapter
 import am.timerlabs.animation.AnimateView
+import am.timerlabs.components.TimerAdapter
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.res.Resources
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 import com.yarolegovich.discretescrollview.DiscreteScrollView
 import com.yarolegovich.discretescrollview.transform.ScaleTransformer
 import java.util.*
-
-/**
- * TODO: Save EditText custom numbers to array and add to adapter
- * TODO: Room db (or other local db)
- */
 
 class TimerActivity : AppCompatActivity() {
     private lateinit var appbarLayout: LinearLayout
@@ -35,6 +30,9 @@ class TimerActivity : AppCompatActivity() {
     private lateinit var activeTimerBackground: View
     private lateinit var timerCurrentSeconds: TextView
     private lateinit var timer: CountDownTimer
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var preferencesEditor: SharedPreferences.Editor
+    private lateinit var alertBuilder: AlertDialog.Builder
     private var timerNumbersSet: TreeSet<Int> = sortedSetOf(1, 5, 10, 15, 20, 25, 30)
     private var isTimerEditTextVisible = false
 
@@ -48,9 +46,18 @@ class TimerActivity : AppCompatActivity() {
         getTimerDuration()
         stopTimer()
         setCustomTime()
+        setAlertMessage()
+        deleteTimerElement()
     }
 
+    @SuppressLint("CommitPrefEdits")
     private fun init() {
+        sharedPreferences = getPreferences(MODE_PRIVATE)
+        preferencesEditor = sharedPreferences.edit()
+
+        val sharedSet: MutableSet<String>? = sharedPreferences.getStringSet("timer_numbers", mutableSetOf())
+        combineTwoSets(timerNumbersSet, sharedSet)
+
         appbarLayout = findViewById(R.id.appbar_layout)
         appbarStopwatch = findViewById(R.id.appbar_stopwatch)
         customTimerBtn = findViewById(R.id.custom_time_timer)
@@ -62,12 +69,36 @@ class TimerActivity : AppCompatActivity() {
         timerCurrentSeconds = findViewById(R.id.active_timer_seconds)
     }
 
+    private fun setAlertMessage() {
+        alertBuilder = AlertDialog.Builder(this)
+
+        alertBuilder.setTitle("Delete timer element")
+        alertBuilder.setMessage("Do you want to delete this element ?")
+                .setCancelable(false)
+                .setPositiveButton("Yes") { dialog, _ ->
+                    dialog.cancel()
+                    timerNumbersSet.remove(timersList.currentItem)
+                    timersList.adapter?.notifyDataSetChanged()
+                    putSetToCache()
+                    Toast.makeText(applicationContext, "Successfully deleted", Toast.LENGTH_SHORT).show()
+                }
+                .setNegativeButton("No") { dialog, _ ->
+                    dialog.cancel()
+                    Toast.makeText(applicationContext, "Canceled", Toast.LENGTH_SHORT).show()
+                }
+    }
+
+    private fun showDeleteAlert() {
+        alertBuilder.create()
+        alertBuilder.show()
+    }
+
     private fun fillTimersList() {
         timersList.adapter = TimerAdapter(timerNumbersSet)
         timersList.setItemTransformer(
-            ScaleTransformer.Builder()
-            .setMinScale(0.5f)
-            .build())
+                ScaleTransformer.Builder()
+                        .setMinScale(0.5f)
+                        .build())
     }
 
     private fun setCustomTime() {
@@ -87,15 +118,54 @@ class TimerActivity : AppCompatActivity() {
         }
     }
 
+    private fun deleteTimerElement() {
+        timersList.isLongClickable = true
+
+        timersList.setOnLongClickListener {
+            showDeleteAlert()
+            println("LONG CLICKED")
+            true
+        }
+    }
+
     private fun addInputElementToTimersList(time: Int) {
         timerNumbersSet.add(time)
         timersList.adapter?.notifyDataSetChanged()
+
+        putSetToCache()
+    }
+
+    private fun putSetToCache() {
+        preferencesEditor.putStringSet("timer_numbers", convertIntSetToStringSet(timerNumbersSet))
+        preferencesEditor.commit()
+    }
+
+    private fun convertIntSetToStringSet(treeSet: TreeSet<Int>): TreeSet<String> {
+        val timerNumbersStrSet: TreeSet<String> = sortedSetOf()
+
+        treeSet.map {
+            timerNumbersStrSet.add(it.toString())
+        }
+
+        return timerNumbersStrSet
+    }
+
+    private fun combineTwoSets(timerSet: TreeSet<Int>, mutableSet: MutableSet<String>?) {
+        mutableSet?.map {
+            timerSet.add(it.toInt())
+        }
     }
 
     private fun getTimerDuration() {
         startTimerBtn.setOnClickListener {
             val seconds: Int = if (isTimerEditTextVisible) {
                 val inputTime = customTimerET.text.toString().toInt()
+
+                if (inputTime < 1) {
+                    Toast.makeText(this, "Enter the positive number starts from 1", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
                 addInputElementToTimersList(inputTime)
                 inputTime
             } else {
