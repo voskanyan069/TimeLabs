@@ -87,10 +87,17 @@ class TimerActivity : AppCompatActivity() {
         }
     }
 
+    private fun addInputElementToTimersList(time: Int) {
+        timerNumbersSet.add(time)
+        timersList.adapter?.notifyDataSetChanged()
+    }
+
     private fun getTimerDuration() {
         startTimerBtn.setOnClickListener {
             val seconds: Int = if (isTimerEditTextVisible) {
-                customTimerET.text.toString().toInt()
+                val inputTime = customTimerET.text.toString().toInt()
+                addInputElementToTimersList(inputTime)
+                inputTime
             } else {
                 timerNumbersSet.elementAt(timersList.currentItem)
             }

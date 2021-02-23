@@ -60,7 +60,9 @@ class StopwatchActivity : AppCompatActivity() {
                     startStopwatchBtn.setOnClickListener { null }
                 }.start()
 
+            tempSec = 0
             stopwatchCurrentSeconds.text = "0"
+            pauseResumeStopwatchBtn.text = getString(R.string.pause)
             val stopwatchVisibility = stopwatchCurrentSeconds.visibility
             stopwatchCurrentSeconds.visibility = View.VISIBLE
             stopwatchActionButtonsLayout.visibility = View.VISIBLE
